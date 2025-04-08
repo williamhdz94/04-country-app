@@ -10,9 +10,4 @@ export class CountryInputSearchComponent {
   valueSearch = output<string>();
   placeHolder = input<string>();
 
-  onSearch(value: string) {
-    // add validations
-    this.valueSearch.emit(value);
-  }
-
 }

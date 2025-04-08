@@ -1,5 +1,10 @@
-<app-country-input-search placeHolder="Buscar por capital"/>
+<app-country-input-search placeHolder="Buscar por capital" (valueSearch)="onSearch($event)"/>
 
-<app-country-list />
+@if ( isError() ) {
+  <h3>{{ isError() }}</h3>
+}@else {
+  <app-country-list [countries]="countries()"/>
+}
+
 
 

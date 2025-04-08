@@ -13,9 +13,26 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
+      @for (countrie of countries(); track countrie.cca2; let index = $index) {
+       <tr>
+        <td>{{ index + 1 }}</td>
+        <td> {{ countrie.flag }} </td>
+        <td>
+          <img class="w-10" [src]="countrie.flagSvg" [alt]="countrie.name">
+        </td>
+        <td>{{ countrie.name }}</td>
+        <td>{{ countrie.capital }}</td>
+        <td>
+          <span class="badge badge-secondary">
+            {{ countrie.population | number }}
+          </span>
+        </td>
+        <td>
+          <a class="link-primary cursor-pointer">Mas información</a>
+        </td>
+        </tr>
+      }
 
-      </tr>
     </tbody>
   </table>
 
