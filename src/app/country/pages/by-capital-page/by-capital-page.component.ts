@@ -1,8 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { CountryInputSearchComponent } from '../../components/country-input-search/country-input-search.component';
 import { CountryListComponent } from '../../components/country-list/country-list.component';
 import { CountryService } from '../../services/country.service';
 import { ICountry } from '../../interfaces/ICountry';
+import { firstValueFrom, of } from 'rxjs';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -15,28 +17,51 @@ import { ICountry } from '../../interfaces/ICountry';
 export class ByCapitalPageComponent {
 
   countryService = inject(CountryService);
-  isLoading = signal(false);
-  isError = signal<string | null>(null);
-  countries = signal<ICountry[]>([]);
+  query = signal('');
 
-  onSearch(value: string) {
-    if( this.isLoading() ) return;
+  countryResource = rxResource({
+    request: () => ({ query: this.query() }),
+    loader: ({ request }) => {
+      if( !request.query ) return of([]);
+      return this.countryService.searchByCapital(request.query)
+    }
+   })
 
-    this.isLoading.set(true);
-    this.isError.set(null);
+   // VERSION TEST - Resource with promises
+  //  countryResource = resource({
+  //   request: () => ({ query: this.query() }),
+  //   loader: async({ request }) => {
+  //     if ( !this.query() ) return [];
 
-    this.countryService.searchByCapital(value).subscribe({
-      next: (countries) => {
-        this.isLoading.set(false);
-        this.countries.set(countries);
-        console.log(countries);
-      },
-      error: (err) => {
-        this.isLoading.set(false);
-        this.countries.set([]);
-        this.isError.set(err)
-      }
-    })
-  }
+  //     return await firstValueFrom(
+  //     this.countryService.searchByCapital(request.query)
+  //     );
+  //   }
+  //  })
+
+  // VERSION STABLE
+  // isLoading = signal(false);
+  // isError = signal<string | null>(null);
+  // countries = signal<ICountry[]>([]);
+
+  // onSearch(value: string) {
+  //   if( this.isLoading() ) return;
+
+  //   this.isLoading.set(true);
+  //   this.isError.set(null);
+
+  //   this.countryService.searchByCapital(value).subscribe({
+  //     next: (countries) => {
+  //       this.isLoading.set(false);
+  //       this.countries.set(countries);
+  //       console.log(countries);
+  //     },
+  //     error: (err) => {
+  //       this.isLoading.set(false);
+  //       this.countries.set([]);
+  //       this.isError.set(err)
+  //     }
+  //   })
+  // }
 
 }

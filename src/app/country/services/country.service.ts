@@ -26,4 +26,16 @@ export class CountryService {
     )
   }
 
+  searchByCountry( query: string ): Observable<ICountry[]> {
+    query = query.toLocaleLowerCase();
+
+    return this.http.get<ICountriesResponse[]>(`${ API_URL }/name/${ query }`).pipe(
+      map( ( data ) => CountryMapper.mapCountrieToCountryArray(data) ),
+      catchError( (err) =>  {
+        console.log(err);
+        return throwError(() => new Error('No se encontraron resultados'))
+      })
+    )
+  }
+
 }
