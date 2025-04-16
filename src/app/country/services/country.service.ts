@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ICountriesResponse } from '../interfaces/ICountriesResponse';
-import { catchError, delay, map, Observable, throwError } from 'rxjs';
+import { catchError, delay, map, Observable, of, throwError } from 'rxjs';
 import { CountryMapper } from '../mappers/country.mapper';
 import { ICountry } from '../interfaces/ICountry';
 

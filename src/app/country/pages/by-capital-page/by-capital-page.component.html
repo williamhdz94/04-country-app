@@ -1,4 +1,4 @@
-<app-country-input-search placeHolder="Buscar por capital" (valueSearch)="query.set($event)"/>
+<app-country-input-search [debounceTime]="800" placeHolder="Buscar por capital" (valueSearch)="query.set($event)"/>
 
 <app-country-list
 [countries]="countryResource.value() ?? []"
