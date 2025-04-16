@@ -1,0 +1,32 @@
+<section class="stats shadow">
+  <div class="stat place-items-center">
+    <div class="stat-title">Población</div>
+    <div class="stat-value">{{ country().population | number }}</div>
+    <div class="stat-desc">{{ currentYear() }}</div>
+  </div>
+
+  <div class="stat place-items-center">
+    <div class="stat-title">País</div>
+    <div class="stat-value text-secondary">{{ country().name }}</div>
+    <div class="stat-desc text-secondary">{{ country().population }}</div>
+  </div>
+
+  <div class="stat place-items-center">
+    <div class="stat-title">Sub region</div>
+    <div class="stat-value">1,200</div>
+    <div class="stat-desc">↘︎ 90 (14%)</div>
+  </div>
+</section>
+
+<section class="diff aspect-16/9" tabindex="0">
+  <div class="diff-item-1" role="img" tabindex="0">
+    <img alt="daisy" src="https://img.daisyui.com/images/stock/photo-1560717789-0ac7c58ac90a.webp" />
+  </div>
+  <div class="diff-item-2" role="img">
+    <img
+      alt="daisy"
+      src="https://img.daisyui.com/images/stock/photo-1560717789-0ac7c58ac90a-blur.webp" />
+  </div>
+  <div class="diff-resizer"></div>
+</section>
+

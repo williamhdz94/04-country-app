@@ -1,7 +1,8 @@
 <app-country-input-search placeHolder="Buscar por pais" (valueSearch)="query.set($event)"/>
 
-@if ( countryResource.error() ) {
-  <h3>{{ countryResource.error() }}</h3>
-}@if( countryResource.hasValue() ) {
-  <app-country-list [countries]="countryResource.value()"/>
-}
+<app-country-list
+[countries]="countryResource.value() ?? []"
+[errorMessage]="countryResource.error()"
+[isEmpty]="countryResource.value()?.length === 0"
+[isLoading]="countryResource.isLoading()"
+/>

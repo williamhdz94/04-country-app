@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ICountriesResponse } from '../interfaces/ICountriesResponse';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, delay, map, Observable, throwError } from 'rxjs';
 import { CountryMapper } from '../mappers/country.mapper';
 import { ICountry } from '../interfaces/ICountry';
 
@@ -20,7 +20,6 @@ export class CountryService {
     return this.http.get<ICountriesResponse[]>(`${ API_URL }/capital/${ query }`).pipe(
       map( ( data ) => CountryMapper.mapCountrieToCountryArray(data) ),
       catchError( (err) =>  {
-        console.log(err);
         return throwError(() => new Error('No se encontraron resultados'))
       })
     )
@@ -31,8 +30,19 @@ export class CountryService {
 
     return this.http.get<ICountriesResponse[]>(`${ API_URL }/name/${ query }`).pipe(
       map( ( data ) => CountryMapper.mapCountrieToCountryArray(data) ),
+      // delay(3000),
       catchError( (err) =>  {
-        console.log(err);
+        return throwError(() => new Error('No se encontraron resultados'))
+      })
+    )
+  }
+
+  searchCountryByCode( code: string ) {
+
+    return this.http.get<ICountriesResponse[]>(`${ API_URL }/alpha/${ code }`).pipe(
+      map( ( data ) => CountryMapper.mapCountrieToCountryArray(data) ),
+      map( countries => countries.at(0) ),
+      catchError( (err) =>  {
         return throwError(() => new Error('No se encontraron resultados'))
       })
     )
