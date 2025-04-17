@@ -4,6 +4,7 @@ import { ICountriesResponse } from '../interfaces/ICountriesResponse';
 import { catchError, delay, map, Observable, of, tap, throwError } from 'rxjs';
 import { CountryMapper } from '../mappers/country.mapper';
 import { ICountry } from '../interfaces/ICountry';
+import { TRegion } from '../../types/TRegion';
 
 const API_URL = 'https://restcountries.com/v3.1';
 
@@ -15,6 +16,7 @@ export class CountryService {
   private http = inject(HttpClient);
   private queryCacheCapital = new Map<string, ICountry[]>();
   private queryCacheCountry = new Map<string, ICountry[]>();
+  private regionCacheCountry = new Map<TRegion, ICountry[]>();
 
   searchByCapital( query: string ): Observable<ICountry[]> {
     query = query.toLocaleLowerCase();
@@ -46,6 +48,24 @@ export class CountryService {
     return this.http.get<ICountriesResponse[]>(`${ API_URL }/name/${ query }`).pipe(
       map( ( data ) => CountryMapper.mapCountrieToCountryArray(data) ),
       tap((countries) => this.queryCacheCountry.set(query, countries)),
+      // delay(3000),
+      catchError( (err) =>  {
+        return throwError(() => new Error('No se encontraron resultados'))
+      })
+    )
+  }
+
+  searchByRegion( region: TRegion ): Observable<ICountry[]> {
+
+    if ( this.regionCacheCountry.has(region) ) {
+      return of( this.regionCacheCountry.get(region) ?? [] );
+    }
+
+    console.log('Llegando al servidor por el query', region);
+
+    return this.http.get<ICountriesResponse[]>(`${ API_URL }/region/${ region }`).pipe(
+      map( ( data ) => CountryMapper.mapCountrieToCountryArray(data) ),
+      tap((countries) => this.regionCacheCountry.set(region, countries)),
       // delay(3000),
       catchError( (err) =>  {
         return throwError(() => new Error('No se encontraron resultados'))
