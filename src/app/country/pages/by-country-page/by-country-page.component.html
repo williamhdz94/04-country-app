@@ -1,4 +1,4 @@
-<app-country-input-search placeHolder="Buscar por pais" (valueSearch)="query.set($event)"/>
+<app-country-input-search placeHolder="Buscar por pais" (valueSearch)="query.set($event)" [initialValue]="query()"/>
 
 <app-country-list
 [countries]="countryResource.value() ?? []"
